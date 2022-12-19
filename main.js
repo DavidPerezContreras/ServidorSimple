@@ -28,6 +28,13 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+app.get('/userdata', (req, res) => {
+  res.send({usuario:"David",color:"FF0000"})
+})
+
+
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
