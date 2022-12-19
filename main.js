@@ -32,11 +32,13 @@ app.get('/', (req, res) => {
 //Necesitamos pasarle el id en la url:
 //Ejemplo   misitio.com:3000/userdata?id=1
 
-//Desde el servidor accedemos al parámetro que hemos recibido en la URL con req.params.NOMBREDELPARAMETRO
+//Desde el servidor accedemos al parámetro que hemos recibido en la URL con req.query.NOMBREDELPARAMETRO
+//Son diferentes a los parámetros recibidos en el BODY (Cuerpo de la petición, los cuales vienen cifrados,
+//es donde debemos mandar las contraseñas y demás)
 app.get('/userdata:id', (req, res) => {
-  console.log("Endpoint called: userdata    id="+req.params.id);
+  console.log("Endpoint called: userdata    id="+req.query.id);
 
-  res.send({id:req.params.id,usuario:"David",color:"FF0000"})
+  res.send({id:req.query.id,usuario:"David",color:"FF0000"})
 })
 
 
