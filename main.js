@@ -28,8 +28,15 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/userdata', (req, res) => {
-  res.send({usuario:"David",color:"FF0000"})
+
+//Necesitamos pasarle el id en la url:
+//Ejemplo   misitio.com:3000/userdata?id=1
+
+//Desde el servidor accedemos al parámetro que hemos recibido en la URL con req.params.NOMBREDELPARAMETRO
+app.get('/userdata:id', (req, res) => {
+  console.log("Endpoint called: userdata    id="+req.params.id);
+
+  res.send({id:req.params.id,usuario:"David",color:"FF0000"})
 })
 
 
