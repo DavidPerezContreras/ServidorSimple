@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 //Desde el servidor accedemos al parámetro que hemos recibido en la URL con req.query.NOMBREDELPARAMETRO
 //Son diferentes a los parámetros recibidos en el BODY (Cuerpo de la petición, los cuales vienen cifrados,
 //es donde debemos mandar las contraseñas y demás)
-app.get('/userdata:id', (req, res) => {
+app.get('/userdata/:id', (req, res) => {
   console.log("Endpoint called: userdata    id="+req.query.id);
 
   res.send({id:req.query.id,usuario:"David",color:"FF0000"})
