@@ -1,5 +1,11 @@
 //Para ejecutar este archivo, en Windows o Linux escribimos en la terminal:
 //  #  node main.js
+//Hay que asegurarse de que el directorio actual es la carpeta del proyecto, porque intentará buscar las 
+//dependencias en la subcarpeta node_modules junto con otra información porque hace uso de rutas relativas.
+//Nos saltarían errorres MODULE_NOT_FOUND cuando utilizamos dependencias.
+
+//Otro error muy común es que intentemos iniciar el servidor a través de un puerto ya en uso,
+//Ya sea por otra instancia de node o por cualquier otro proceso.
 
 
 
@@ -21,8 +27,17 @@
 
 
 const express = require('express')
+//const { get } = require('express/lib/response') Esto no sé que es hice copia pega
+const mysql = require('mysql')  //Importa el conector con mysql
+
+
+
+
+
+
+
 const app = express()
-const port = 3000
+const port = 3000 //Puerto a través del cual tenemos que realizar las consultas HTTP
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -47,3 +62,70 @@ app.get('/userdata', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
+
+
+
+
+
+
+//Crea una conexion a la base de datos y la devuelve
+function getConnection(){
+  return con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    database: "faltas"
+  });
+}
+//En la base de datos "faltas" ahora mismo sólo hay una tabla, llamada "usuarios" con:
+  //id int NOT NULL AUTO_INCREMENT PRIMARY KEY
+  //username varchar(20)
+
+//Muestra el primer usuario de la base de datos
+//(En esa consulta es el que tiene id 1) (Posicion 0 del array)
+//id es un campo    int NOT NULL AUTO_INCREMENT PRIMARY KEY  
+// por lo que cuando creamos uno,
+//El id cogerá un valor automáticemente. Empezando por el 1, el segundo tendrá id 2, etc.
+
+//Como necesitamos pasarle un número y no texto,
+///En este caso es suficiente con hacer if(!isNaN(id))
+//Que devolverá true encaso de que sea un número
+
+//En cualquier caso siempre que necesitamos dar parámetros desde
+//Javascript en sentencias SQL deberíamos hacer consultas preparadas
+
+function getUserById(id){
+  let con=getConnection()
+  if(!isNaN(id)){
+    con.connect(function(err) {
+      if (err) throw err;
+      con.query("SELECT * FROM usuarios WHERE id="+id, function (err, result, fields) {
+        if (err) throw err;
+        console.log(result[0].username);
+      });
+    });
+  }
+}
+//Hace un console.log del usuario con id 2
+getUserById(2)
+
+
+//Devuelve lo mismo que getUserById(id)  sólo que esta vez
+//mediante el uso de consultas preparadas
+function preparedStatementGetUserById(id){
+  let con=getConnection()
+
+  if(!isNaN(id)){
+    con.connect(function(err) {
+      if (err) throw err;
+      con.query("SELECT * FROM usuarios WHERE id = ?",[1], function (err, result, fields) {
+        if (err) throw err;
+        console.log(result[0].username);
+      });
+    });
+  }
+}
+
+//Hace un console.log del usuario con id 2
+preparedStatementGetUserById(2)
